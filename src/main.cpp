@@ -5,8 +5,9 @@
 #include <iostream>
 #include "Sensor.hpp"
 
+Sensor* G_sensor;
+
 extern "C" {
-    Sensor* G_sensor;
     int tuxracer(int argc, char** argv);
 }
 
@@ -20,7 +21,6 @@ int main(int argc, char** argv)
     else {
         std::cout << argv[0] << std::endl;
     }
-
     std::cout << "hello world!\n";
     return tuxracer(argc, argv);
 }

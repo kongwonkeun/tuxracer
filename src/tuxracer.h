@@ -68,7 +68,7 @@
 /* OpenGL */
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <gl/glext.h>
+#include <GL/glext.h>
 
 /* Tcl -- name of header is system-dependent :( */
 #include TCL_HEADER
