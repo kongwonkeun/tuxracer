@@ -30,21 +30,19 @@ bool_t was_current_race_won()
     race_data_t *race;
     player_data_t *plyr;
 
-    check_assertion( g_game.practicing == False, "was_current_race_won() called in practice mode" );
-
-    if ( g_game.race_aborted ) {
+    check_assertion(g_game.practicing == False, "was_current_race_won() called in practice mode");
+    if (g_game.race_aborted) {
         return False;
     }
-
     d = g_game.difficulty;
     race = &g_game.race;
-    plyr = get_player_data( local_player() );
+    plyr = get_player_data(local_player());
 
-    if ( g_game.time <= race->time_req[d] && plyr->herring >= race->herring_req[d] && plyr->score >= race->score_req[d] ) {
-        print_debug( DEBUG_GAME_LOGIC, "won race" );
+    if (g_game.time <= race->time_req[d] && plyr->herring >= race->herring_req[d] && plyr->score >= race->score_req[d]) {
+        print_debug(DEBUG_GAME_LOGIC, "won race");
         return True;
     } else {
-        print_debug( DEBUG_GAME_LOGIC, "lost race" );
+        print_debug(DEBUG_GAME_LOGIC, "lost race");
         return False;
     }
 }
@@ -55,86 +53,84 @@ bool_t is_current_race_last_race_in_cup( void )
     list_elem_t elem;
     list_t race_list;
 
-    check_assertion( !g_game.practicing, "is_current_race_last_race_in_cup called in practice mode" );
-    check_assertion( g_game.current_event != NULL, "current event is null" );
-    check_assertion( g_game.current_cup != NULL, "current cup is null" );
+    check_assertion(!g_game.practicing, "is_current_race_last_race_in_cup called in practice mode");
+    check_assertion(g_game.current_event != NULL, "current event is null");
+    check_assertion(g_game.current_cup != NULL, "current cup is null");
 
-    elem = get_event_by_name( g_game.current_event );
-    check_assertion( elem != NULL, "couldn't find event" );
+    elem = get_event_by_name(g_game.current_event);
+    check_assertion(elem != NULL, "couldn't find event");
     
-    elem = get_event_cup_by_name( (event_data_t*) get_list_elem_data( elem ), g_game.current_cup );
-    check_assertion( elem != NULL, "couldn't find cup" );
+    elem = get_event_cup_by_name((event_data_t*)get_list_elem_data(elem), g_game.current_cup);
+    check_assertion(elem != NULL, "couldn't find cup");
 
-    race_list = get_cup_race_list( (cup_data_t*) get_list_elem_data( elem ) );
+    race_list = get_cup_race_list((cup_data_t*) get_list_elem_data(elem));
+    check_assertion(race_list != NULL, "race list is null");
 
-    check_assertion( race_list != NULL, "race list is null" );
+    elem = get_list_tail(race_list);
+    check_assertion(elem != NULL, "race list is empty");
 
-    elem = get_list_tail( race_list );
+    race_data = (race_data_t*)get_list_elem_data(elem);
 
-    check_assertion( elem != NULL, "race list is empty" );
-
-    race_data = (race_data_t*) get_list_elem_data( elem );
-
-    if ( strcmp( race_data->name, g_game.race.name ) == 0 ) {
+    if (strcmp(race_data->name, g_game.race.name) == 0) {
         return True;
     } else {
         return False;
     }
 }
 
-bool_t did_player_beat_best_results( void )
+bool_t did_player_beat_best_results(void)
 {
-    player_data_t *plyr = get_player_data( local_player() );
+    player_data_t *plyr = get_player_data(local_player());
     scalar_t time;
     int herring;
     int score;
 
-    if ( !get_saved_race_results( plyr->name, g_game.current_event, g_game.current_cup, g_game.race.name, g_game.difficulty, &time, &herring, &score ) ) {
+    if (!get_saved_race_results(plyr->name, g_game.current_event, g_game.current_cup, g_game.race.name, g_game.difficulty, &time, &herring, &score)) {
         /* No previous result, so we didn't "beat" anything */
         return False;
     }
 
-    if ( plyr->score > score ) {
+    if (plyr->score > score) {
         return True;
     } else {
         return False;
     }
 }
 
-bool_t is_current_cup_complete( void )
+bool_t is_current_cup_complete(void)
 {
     event_data_t *event_data;
     list_elem_t elem;
 
-    check_assertion( !g_game.practicing, "is_current_cup_complete called in practice mode" );
-    check_assertion( g_game.current_event != NULL, "current event is null" );
-    check_assertion( g_game.current_cup != NULL, "current cup is null" );
+    check_assertion(!g_game.practicing, "is_current_cup_complete called in practice mode");
+    check_assertion(g_game.current_event != NULL, "current event is null");
+    check_assertion(g_game.current_cup != NULL, "current cup is null");
 
-    elem = get_event_by_name( g_game.current_event );
-    check_assertion( elem != NULL, "couldn't find event" );
+    elem = get_event_by_name(g_game.current_event);
+    check_assertion(elem != NULL, "couldn't find event");
 
-    event_data = (event_data_t*) get_list_elem_data( elem );
+    event_data = (event_data_t*)get_list_elem_data(elem);
     
-    elem = get_event_cup_by_name( event_data, g_game.current_cup );
-    check_assertion( elem != NULL, "couldn't find cup" );
+    elem = get_event_cup_by_name(event_data, g_game.current_cup);
+    check_assertion(elem != NULL, "couldn't find cup");
 
-    return is_cup_complete( event_data, elem );
+    return is_cup_complete(event_data, elem);
 }
 
-void update_player_score( player_data_t *plyr )
+void update_player_score(player_data_t *plyr)
 {
     scalar_t par_time;
 
     /* use easy time as par score */
     par_time = g_game.race.time_req[DIFFICULTY_LEVEL_EASY];
-    plyr->score = max( 0, (int) ( 100*(par_time-g_game.time) + 200*plyr->herring ) );
+    plyr->score = max(0, (int)(100 * (par_time - g_game.time) + 200 * plyr->herring));
 }
 
-void get_time_components( scalar_t time, int *minutes, int *seconds, int *hundredths )
+void get_time_components(scalar_t time, int *minutes, int *seconds, int *hundredths)
 {
-    *minutes = (int) (time / 60);
-    *seconds = ((int) time) % 60;
-    *hundredths = ((int) (time * 100 + 0.5) ) % 100;
+    *minutes = (int)(time / 60);
+    *seconds = ((int)time) % 60;
+    *hundredths = ((int)(time * 100 + 0.5)) % 100;
 }
 
 /* EOF */

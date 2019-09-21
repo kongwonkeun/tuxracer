@@ -67,37 +67,37 @@ void adjust_tux_joints(scalar_t turnFact, bool_t isBraking, scalar_t paddling_fa
     ext_paddling_angle = MAX_EXT_PADDLING_ANGLE * sin(paddling_factor * M_PI);
     kick_paddling_angle = MAX_KICK_PADDLING_ANGLE * sin(paddling_factor * M_PI * 2.0);
 
-    turning_angle[0] = max(-turnFact,0.0) * MAX_ARM_ANGLE;
-    turning_angle[1] = max(turnFact,0.0) * MAX_ARM_ANGLE;
+    turning_angle[0] = max(-turnFact, 0.0) * MAX_ARM_ANGLE;
+    turning_angle[1] = max( turnFact, 0.0) * MAX_ARM_ANGLE;
 
-    flap_angle = MAX_ARM_ANGLE * (0.5 + 0.5*sin(M_PI*flap_factor*6-M_PI/2));
+    flap_angle = MAX_ARM_ANGLE * (0.5 + 0.5 * sin(M_PI * flap_factor * 6 - M_PI / 2));
 
     /* Adjust arms for turning */
-    rotate_scene_node(tuxLeftShoulderJoint, 'z', min( braking_angle + paddling_angle + turning_angle[0], MAX_ARM_ANGLE) + flap_angle);
-    rotate_scene_node(tuxRightShoulderJoint, 'z', min( braking_angle + paddling_angle + turning_angle[1],  MAX_ARM_ANGLE) + flap_angle);
+    rotate_scene_node(tuxLeftShoulderJoint,  'z', min(braking_angle + paddling_angle + turning_angle[0], MAX_ARM_ANGLE) + flap_angle);
+    rotate_scene_node(tuxRightShoulderJoint, 'z', min(braking_angle + paddling_angle + turning_angle[1], MAX_ARM_ANGLE) + flap_angle);
 
     /* Adjust arms for paddling */
-    rotate_scene_node(tuxLeftShoulderJoint, 'y', -ext_paddling_angle);
-    rotate_scene_node(tuxRightShoulderJoint, 'y', ext_paddling_angle);
+    rotate_scene_node(tuxLeftShoulderJoint,  'y', -ext_paddling_angle);
+    rotate_scene_node(tuxRightShoulderJoint, 'y',  ext_paddling_angle);
 
     force_angle = max(-20.0, min(20.0, -net_force.z / 300.0));
     turn_leg_angle = turnFact * 10;
     
     /* Adjust hip joints */
     reset_scene_node(tuxLeftHipJoint);
-    rotate_scene_node(tuxLeftHipJoint, 'z', -20 + turn_leg_angle + force_angle);
+    rotate_scene_node(tuxLeftHipJoint,  'z', -20 + turn_leg_angle + force_angle);
     reset_scene_node(tuxRightHipJoint);
     rotate_scene_node(tuxRightHipJoint, 'z', -20 - turn_leg_angle + force_angle);
 
     /* Adjust knees */
     reset_scene_node(tuxLeftKneeJoint);
-    rotate_scene_node(tuxLeftKneeJoint, 'z', -10 + turn_leg_angle - min( 35, speed ) + kick_paddling_angle + force_angle);
+    rotate_scene_node(tuxLeftKneeJoint,  'z', -10 + turn_leg_angle - min(35, speed) + kick_paddling_angle + force_angle);
     reset_scene_node(tuxRightKneeJoint);
-    rotate_scene_node(tuxRightKneeJoint, 'z', -10 - turn_leg_angle - min( 35, speed ) - kick_paddling_angle  + force_angle);
+    rotate_scene_node(tuxRightKneeJoint, 'z', -10 - turn_leg_angle - min(35, speed) - kick_paddling_angle + force_angle);
 
     /* Adjust ankles */
     reset_scene_node(tuxLeftAnkleJoint);
-    rotate_scene_node(tuxLeftAnkleJoint, 'z', -20 + min(50, speed));
+    rotate_scene_node(tuxLeftAnkleJoint,  'z', -20 + min(50, speed));
     reset_scene_node(tuxRightAnkleJoint);
     rotate_scene_node(tuxRightAnkleJoint, 'z', -20 + min(50, speed));
 
@@ -126,7 +126,7 @@ void draw_tux()
     set_gl_options(TUX);
     /* Turn on lights */
     setup_course_lighting();
-    draw_scene_graph( tuxRootNode );
+    draw_scene_graph(tuxRootNode);
 } 
 
 void load_tux()

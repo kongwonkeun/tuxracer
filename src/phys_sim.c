@@ -29,11 +29,17 @@
 #include "audio.h"
 #include "loop.h"
 
+//---- kong ----
+#include "Sensor.hpp"
+//#define MIN_TUX_SPEED           0.0     // Minimum speed (m/s)
+//#define INIT_TUX_SPEED          0.0     // Initial Tux speed (m/s)
+//----
+#define MIN_TUX_SPEED           1.4     // Minimum speed (m/s)
+#define INIT_TUX_SPEED          3.0     // Initial Tux speed (m/s)
+
 #define TUX_MASS                20      // Tux's mass (kg)
 #define TUX_WIDTH               0.45    // Width of Tux (m)
-#define MIN_TUX_SPEED           1.4     // Minimum speed (m/s)
 #define MIN_FRICTION_SPEED      2.8     // Minimum speed for friction to take effect (m/s)
-#define INIT_TUX_SPEED          3.0     // Initial Tux speed (m/s)
 #define MAX_FRICTIONAL_FORCE    800     // Maximum frictional force
 #define MAX_TURN_ANGLE          45      // Maximum angle by which frictional force is rotated when turning
 #define MAX_TURN_PERPENDICULAR_FORCE 400    // Maximum turning force perpendicular to direction of movement
@@ -321,7 +327,7 @@ vector_t find_course_normal(scalar_t x, scalar_t z)
     p1 = COURSE_VERTEX(idx1.i, idx1.j);
     p2 = COURSE_VERTEX(idx2.i, idx2.j);
     
-    smooth_nml = add_vectors(scale_vector(u, n0), add_vectors(scale_vector(v, n1), scale_vector(1.-u-v, n2)));
+    smooth_nml = add_vectors(scale_vector(u, n0), add_vectors(scale_vector(v, n1), scale_vector(1. - u - v, n2)));
 
     tri_nml = cross_product(subtract_points(p1, p0), subtract_points(p2, p0));
     normalize_vector(&tri_nml);
@@ -329,7 +335,7 @@ vector_t find_course_normal(scalar_t x, scalar_t z)
     min_bary = min(u, min(v, 1. - u - v));
     interp_factor = min(min_bary / NORMAL_INTERPOLATION_LIMIT, 1.0);
 
-    interp_nml = add_vectors(scale_vector(interp_factor, tri_nml), scale_vector(1.-interp_factor, smooth_nml));
+    interp_nml = add_vectors(scale_vector(interp_factor, tri_nml), scale_vector(1. - interp_factor, smooth_nml));
     normalize_vector(&interp_nml);
     return interp_nml;
 }
@@ -968,6 +974,13 @@ static vector_t calc_net_force(player_data_t *plyr, point_t pos, vector_t vel)
     fric_dir = vel;
     speed = normalize_vector(&fric_dir);
     fric_dir = scale_vector(-1.0, fric_dir);
+
+    //---- kong ---- speed
+    //printf("---- %.2lf ----\n", speed);
+    if (sensor_in_use(G_sensor)) {
+        speed = sensor_speed(G_sensor) / 20;
+    }
+    //----
     
     if (dist_from_surface < 0 && speed > MIN_FRICTION_SPEED) {
         vector_t tmp_nml_f = nml_f;

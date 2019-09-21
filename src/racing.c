@@ -192,11 +192,11 @@ void racing_loop(scalar_t time_step)
 
     //---- kong ---- braking, left_turn, right_turn, padding
     if (sensor_in_use(G_sensor)) {
-        if (sensor_speed(G_sensor) > 0) { paddling = True;  braking  = False; }
-        else                     { paddling = False; braking  = True; }
+        if (sensor_speed(G_sensor) > 0) { paddling = True;  braking = False; }
+        else                            { paddling = False; braking = True; }
         if (sensor_direction(G_sensor) < 0)      { left_turn  = True;  right_turn = False; }
         else if (sensor_direction(G_sensor) > 0) { left_turn  = False; right_turn = True; }
-        else                              { left_turn  = False; right_turn = False; }
+        else                                     { left_turn  = False; right_turn = False; }
     }
     //----
 

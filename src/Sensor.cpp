@@ -25,21 +25,17 @@ void Sensor::SerialInit(char* port)
     std::wstring wp = std::wstring(p.begin(), p.end());
     //----
 
-    std::cout << "---- 1111 ----" << std::endl;
     _handle = CreateFile(wp.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-    std::cout << "---- 2222 ----" << std::endl;
     if (_handle == INVALID_HANDLE_VALUE) {
         throw("error: could not open com port");
     }
     else {
-    std::cout << "---- 4444 ----" << std::endl;
         COMMTIMEOUTS timeout = { 100, 0, 0, 0, 0 };
         DCB dcb;
         if (!SetCommTimeouts(_handle, &timeout)) {
             Sensor::~Sensor();
             throw("error: could not set com port timeout");
         }
-    std::cout << "---- 5555 ----" << std::endl;
         memset(&dcb, 0, sizeof(dcb));
         dcb.DCBlength = sizeof(dcb);
         dcb.BaudRate = 115200; //---- kong ----
@@ -49,14 +45,11 @@ void Sensor::SerialInit(char* port)
         dcb.Parity = NOPARITY;
         dcb.StopBits = ONE5STOPBITS;
         dcb.ByteSize = 8;
-    std::cout << "---- 6666 ----" << std::endl;
         if (!SetCommState(_handle, &dcb)) {
             Sensor::~Sensor();
             throw("error: could not set com port parameters");
         }
-    std::cout << "---- 7777 ----" << std::endl;
     }
-    std::cout << "---- 3333 ----" << std::endl;
     in_use = true;
     _run = true;
     _thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(Sensor::SerialReadThread), this, NULL, &_id);
