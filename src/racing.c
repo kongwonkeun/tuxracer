@@ -41,6 +41,7 @@
 
 //---- kong ----
 #include "Sensor.hpp"
+long int m_ticks = 0;
 //----
 
 /* Time constant for automatic steering centering (s) */
@@ -191,12 +192,27 @@ void racing_loop(scalar_t time_step)
     }
 
     //---- kong ---- braking, left_turn, right_turn, padding
+    m_ticks++;
     if (sensor_in_use(G_sensor)) {
-        if (sensor_speed(G_sensor) > 0) { paddling = True;  braking = False; }
-        else                            { paddling = False; braking = True; }
-        if (sensor_direction(G_sensor) < 0)      { left_turn  = True;  right_turn = False; }
-        else if (sensor_direction(G_sensor) > 0) { left_turn  = False; right_turn = True; }
-        else                                     { left_turn  = False; right_turn = False; }
+        if ((m_ticks % 4) == 0) {
+            if (sensor_speed(G_sensor) < 50) { paddling = False; braking = True; }
+            else if (sensor_speed(G_sensor) > 150) { paddling = True;  braking = False; }
+            else { paddling = False; braking = False; }
+        }
+        else {
+            paddling = False;
+            braking = True;
+        }
+
+        if ((m_ticks % 4) == 0) {
+            if (sensor_direction(G_sensor) < 0) { left_turn = True;  right_turn = False; }
+            else if (sensor_direction(G_sensor) > 0) { left_turn = False; right_turn = True; }
+            else { left_turn = False; right_turn = False; }
+        }
+        else {
+            left_turn = False;
+            right_turn = False;
+        }
     }
     //----
 

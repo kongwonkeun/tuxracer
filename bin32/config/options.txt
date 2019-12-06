@@ -17,13 +17,13 @@ set fullscreen true
 #
 # The horizontal size of the Tux Racer window
 #
-set x_resolution 640
+set x_resolution 1920
 
 # y_resolution
 #
 # The vertical size of the Tux Racer window
 #
-set y_resolution 480
+set y_resolution 1080
 
 # bpp_mode
 #

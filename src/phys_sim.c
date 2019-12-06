@@ -976,10 +976,10 @@ static vector_t calc_net_force(player_data_t *plyr, point_t pos, vector_t vel)
     fric_dir = scale_vector(-1.0, fric_dir);
 
     //---- kong ---- speed
+    //if (sensor_in_use(G_sensor)) {
+    //    speed = sensor_speed(G_sensor) / 20.0;
+    //}
     //printf("---- %.2lf ----\n", speed);
-    if (sensor_in_use(G_sensor)) {
-        speed = sensor_speed(G_sensor) / 20;
-    }
     //----
     
     if (dist_from_surface < 0 && speed > MIN_FRICTION_SPEED) {

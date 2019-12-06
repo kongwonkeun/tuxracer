@@ -14,6 +14,7 @@ public:
     void SerialInit(char *port);
     static void SerialReadThread(void* myInstant);
     void SerialRead();
+    void SendScore(int score);
 
     bool in_use = false;
     int  direction = 0;
@@ -22,6 +23,7 @@ public:
 private:
     void ReadStateMachine(int b);
 
+    HANDLE _score = 0;
     HANDLE _handle = 0;
     HANDLE _thread = 0;
     DWORD _id = 0;
