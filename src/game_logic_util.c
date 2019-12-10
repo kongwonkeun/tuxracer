@@ -24,6 +24,10 @@
 #include "course_mgr.h"
 #include "save.h"
 
+//---- kong ----
+#include "Sensor.hpp"
+//----
+
 bool_t was_current_race_won()
 {
     difficulty_level_t d;
@@ -124,6 +128,10 @@ void update_player_score(player_data_t *plyr)
     /* use easy time as par score */
     par_time = g_game.race.time_req[DIFFICULTY_LEVEL_EASY];
     plyr->score = max(0, (int)(100 * (par_time - g_game.time) + 200 * plyr->herring));
+
+    //---- kong ----
+    sensor_score(G_sensor, plyr->score);
+    //----
 }
 
 void get_time_components(scalar_t time, int *minutes, int *seconds, int *hundredths)

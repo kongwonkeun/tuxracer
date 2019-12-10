@@ -42,9 +42,10 @@ extern "C"
 {
 #endif
     extern Sensor* G_sensor;
-    extern int sensor_in_use(Sensor* s);
-    extern int sensor_direction(Sensor* s);
-    extern int sensor_speed(Sensor* s);
+    extern int  sensor_in_use(Sensor* s);
+    extern int  sensor_direction(Sensor* s);
+    extern int  sensor_speed(Sensor* s);
+    extern void sensor_score(Sensor* s, int score);
 #ifdef __cplusplus
 }
 #endif

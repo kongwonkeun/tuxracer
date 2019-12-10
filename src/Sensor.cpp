@@ -160,9 +160,10 @@ void Sensor::ReadStateMachine(int b)
 }
 
 //---- kong ----
-int sensor_in_use(Sensor* s) { return s->in_use; }
-int sensor_direction(Sensor* s) { return s->direction; }
-int sensor_speed(Sensor* s) { return s->speed; }
+int  sensor_in_use(Sensor* s) { return s->in_use; }
+int  sensor_direction(Sensor* s) { return s->direction; }
+int  sensor_speed(Sensor* s) { return s->speed; }
+void sensor_score(Sensor* s, int score) { s->SendScore(score); }
 //----
 
 /**/
